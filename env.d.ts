@@ -1,14 +1,8 @@
-/// <reference types="@cloudflare/workers-types/2023-07-01" />
-
-declare module "h3" {
-  interface H3EventContext {
-    cf: CfProperties;
+declare module "nitro" {
+  interface RuntimeConfig {
     cloudflare: {
-      request: Request;
-      env: Env;
-      context: ExecutionContext;
+      accountId: string;
+      aiToken: string;
     };
   }
 }
-
-export {};
