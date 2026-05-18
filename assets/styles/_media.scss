@@ -1,0 +1,71 @@
+@use "sass:map";
+@use "sass:list";
+@use "variables" as v;
+
+$breakpoints: (
+  sm: v.$breakpoint-sm,
+  md: v.$breakpoint-md,
+  lg: v.$breakpoint-lg,
+  xl: v.$breakpoint-xl,
+) !default;
+
+@function bp($name) {
+  @if not map.has-key($breakpoints, $name) {
+    @error "Unknown breakpoint `#{$name}`. Available: #{map.keys($breakpoints)}";
+  }
+
+  @return map.get($breakpoints, $name);
+}
+
+@mixin mq-up($from) {
+  @media (min-width: bp($from)) {
+    @content;
+  }
+}
+
+@mixin mq-down($to) {
+  @media (max-width: calc(bp($to) - 0.02px)) {
+    @content;
+  }
+}
+
+@mixin mq-between($from, $to) {
+  @media (min-width: bp($from)) and (max-width: calc(bp($to) - 0.02px)) {
+    @content;
+  }
+}
+
+@mixin mq-only($name) {
+  $keys: map.keys($breakpoints);
+  $index: list.index($keys, $name);
+
+  @if $index == null {
+    @error "Unknown breakpoint `#{$name}`. Available: #{$keys}";
+  }
+
+  $last-index: list.length($keys);
+
+  @if $index == $last-index {
+    @include mq-up($name) {
+      @content;
+    }
+  } @else {
+    $next-name: list.nth($keys, $index + 1);
+
+    @include mq-between($name, $next-name) {
+      @content;
+    }
+  }
+}
+
+@mixin motion-reduce {
+  @media (prefers-reduced-motion: reduce) {
+    @content;
+  }
+}
+
+@mixin motion-safe {
+  @media (prefers-reduced-motion: no-preference) {
+    @content;
+  }
+}
