@@ -2,25 +2,31 @@
 export default defineNuxtConfig({
   compatibilityDate: "2024-11-01",
   devtools: { enabled: true },
-
-  nitro: {
-    preset: "cloudflare_module",
-
-    cloudflare: {
-      deployConfig: true,
-      nodeCompat: true,
+  css: ["@/assets/styles/main.scss"],
+  components: [
+    {
+      path: "~/components",
+      pathPrefix: false,
     },
-  },
+  ],
   runtimeConfig: {
-    cloudflare: {
-      accountId: process.env.CLOUDFLARE_ACCOUNT_ID || "",
-      aiToken: process.env.CLOUDFLARE_AI_TOKEN || "",
-    },
+    groqApiKey: process.env.GROQ_API_KEY,
+    groqModel: process.env.GROQ_MODEL || "llama-3.3-70b-versatile",
   },
   googleFonts: {
     families: {
       Agbalumo: [400],
     },
   },
-  modules: ["nitro-cloudflare-dev", "@nuxtjs/google-fonts"],
+  modules: ["@pinia/nuxt", "@nuxtjs/google-fonts"],
+  vite: {
+    css: {
+      preprocessorOptions: {
+        scss: {
+          additionalData:
+            '@use "@/assets/styles/variables" as *; @use "@/assets/styles/media" as *;',
+        },
+      },
+    },
+  },
 });
