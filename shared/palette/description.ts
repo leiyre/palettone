@@ -5,5 +5,8 @@ export function validatePaletteDescription(rawText: string): string {
   if (!text) {
     throw new Error("Text is required");
   }
-  return text.slice(0, MAX_PROMPT_LENGTH);
+  if (text.length > MAX_PROMPT_LENGTH) {
+    throw new Error(`Text exceeds the maximum length (${MAX_PROMPT_LENGTH})`);
+  }
+  return text;
 }
