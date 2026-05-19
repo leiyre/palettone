@@ -1,22 +1,20 @@
 // server/api/config-debug.ts
 export default defineEventHandler(() => {
+  if (!import.meta.dev) {
+    throw createError({
+      statusCode: 404,
+      message: "Not found",
+    });
+  }
+
   const config = useRuntimeConfig();
   return {
-    cloudflareConfig: {
-      accountId: config.cloudflare?.accountId
-        ? "***" + config.cloudflare.accountId.slice(-4)
-        : "NO DEFINIDO",
-      aiToken: config.cloudflare?.aiToken
-        ? "***" + config.cloudflare.aiToken.slice(-4)
-        : "NO DEFINIDO",
-    },
+    paletteProvider: "groq",
     envVars: {
-      accountId: process.env.CLOUDFLARE_ACCOUNT_ID
-        ? "***" + process.env.CLOUDFLARE_ACCOUNT_ID.slice(-4)
-        : "NO DEFINIDO",
-      aiToken: process.env.CLOUDFLARE_AI_TOKEN
-        ? "***" + process.env.CLOUDFLARE_AI_TOKEN.slice(-4)
-        : "NO DEFINIDO",
+      model: config.groqModel || process.env.GROQ_MODEL || "llama-3.3-70b-versatile",
+      hasGroqApiKey: Boolean(config.groqApiKey || process.env.GROQ_API_KEY),
+      strategy: "groq-chat-completions-json",
     },
+    runtimeKeys: Object.keys(config),
   };
 });
