@@ -1,6 +1,6 @@
-# Nuxt Minimal Starter
+# Palettone
 
-Look at the [Nuxt documentation](https://nuxt.com/docs/getting-started/introduction) to learn more.
+Palettone is a Nuxt 3 app that generates curated color palettes from scene or mood prompts. It uses a layered architecture and a Groq-powered backend service to return balanced, UI-friendly color sets with a short description.
 
 ## Setup
 
