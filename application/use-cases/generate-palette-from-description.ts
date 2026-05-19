@@ -1,4 +1,4 @@
-import { validateDescription } from "~/domain/palette";
+import { validatePaletteDescription } from "~/shared/palette/description";
 import type {
   PaletteApiPort,
   PaletteApiResult,
@@ -17,7 +17,7 @@ export class GeneratePaletteFromDescriptionUseCase {
   constructor(private readonly paletteApi: PaletteApiPort) {}
 
   async execute(input: GeneratePaletteInput): Promise<GeneratePaletteOutput> {
-    const description = validateDescription(input.rawText);
+    const description = validatePaletteDescription(input.rawText);
     const result = await this.paletteApi.generatePalette(description, input.harmony);
     return {
       ...result,

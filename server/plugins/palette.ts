@@ -1,9 +1,9 @@
 import { GeneratePaletteFromTextUseCase } from "~/server/application/use-cases/generate-palette-from-text";
-import { createPaletteGenerator } from "~/server/infrastructure/palette-generator/create-palette-generator";
+import { GroqPaletteGenerator } from "~/server/infrastructure/groq/groq-palette-generator";
 
 export default defineNitroPlugin((nitroApp) => {
   const config = useRuntimeConfig();
-  const generator = createPaletteGenerator({
+  const generator = new GroqPaletteGenerator({
     groqApiKey: config.groqApiKey,
     groqModel: config.groqModel,
   });

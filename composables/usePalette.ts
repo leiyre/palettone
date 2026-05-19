@@ -4,7 +4,6 @@ import {
   toPresentedHexPalette,
   type HslColor,
 } from "~/composables/palette-presentation";
-import { usePaletteGeneration } from "~/composables/usePaletteGeneration";
 import {
   DEFAULT_INTENSITY,
   EMOTION_OPTIONS,
@@ -17,7 +16,7 @@ import {
 } from "~/shared/palette/preferences";
 
 export function usePalette() {
-  const paletteGeneration = usePaletteGeneration();
+  const { $generatePalette } = useNuxtApp();
   const inputText = ref("");
   const currentColors = ref<string[]>([]);
   const basePaletteHsl = ref<HslColor[]>([]);
@@ -62,10 +61,11 @@ export function usePalette() {
 
     try {
       loadingStatus.value = `Generating palette (${selectedHarmony.value})...`;
-      const result = await paletteGeneration.execute(
-        inputText.value,
-        selectedHarmony.value === "auto" ? undefined : selectedHarmony.value,
-      );
+      const result = await $generatePalette.execute({
+        rawText: inputText.value,
+        harmony:
+          selectedHarmony.value === "auto" ? undefined : selectedHarmony.value,
+      });
       basePaletteHsl.value = result.paletteHsl;
       currentEmotion.value = normalizeEmotion(result.reasoning?.emotion);
       intensity.value = normalizeIntensity(result.reasoning?.intensity);
