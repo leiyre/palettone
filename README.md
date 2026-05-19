@@ -2,6 +2,8 @@
 
 Palettone is a Nuxt 3 app that generates curated color palettes from scene or mood prompts. It uses a layered architecture and a Groq-powered backend service to return balanced, UI-friendly color sets with a short description.
 
+Live demo: [https://palettone.vercel.app/](https://palettone.vercel.app/)
+
 ## Setup
 
 Make sure to install dependencies:
@@ -19,6 +21,14 @@ yarn install
 # bun
 bun install
 ```
+
+Create your local environment file:
+
+```bash
+cp .env.example .env
+```
+
+Then set your `GROQ_API_KEY` in `.env` (`GROQ_MODEL` is optional).
 
 ## Development Server
 
