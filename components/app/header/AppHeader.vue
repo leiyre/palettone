@@ -43,6 +43,9 @@ export default {
 
 <style scoped lang="scss">
 .app-header {
+  --brand-logo-size: clamp(56px, 7.2vw, 84px);
+  --brand-title-size: calc(var(--brand-logo-size) * 0.38);
+
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -53,13 +56,14 @@ export default {
     display: flex;
     align-items: center;
     justify-content: center;
-    gap: $space-3;
+    gap: calc(var(--brand-logo-size) * 0.18);
   }
 
   &__title {
     font-family: $font-display;
     margin: 0;
-    font-size: clamp(1.5rem, 2.6vw, 2rem);
+    font-size: var(--brand-title-size);
+    line-height: 1.05;
     text-shadow: 0 0 6px rgba(255, 255, 255, 0.45);
   }
 
@@ -74,7 +78,7 @@ export default {
 }
 
 :deep(.main-logo) {
-  width: 84px;
+  width: var(--brand-logo-size);
   margin: 0;
 }
 </style>

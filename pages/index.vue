@@ -2,10 +2,9 @@
   <div class="page">
     <UiBgPalette :colors="displayedWaveBandColors" :idle="!hasGeneratedPalette" />
     <UiThemeToggle :is-dark="isDarkTheme" @toggle="toggleTheme" />
+    <AppHeader class="page__brand" heading-id="page-title" />
 
     <div class="page__shell">
-      <AppHeader class="page__brand" heading-id="page-title" />
-
       <main class="page__card" :aria-busy="isLoading ? 'true' : 'false'" aria-labelledby="page-title">
 
         <PaletteInputForm v-model="inputText" :harmony="selectedHarmony" :harmony-options="harmonyOptions"
@@ -19,11 +18,6 @@
         <div v-if="error" class="page__error" role="alert" aria-live="assertive" aria-atomic="true">
           {{ error }}
         </div>
-
-        <GeneratedPalette v-if="palette.length > 0" :palette="palette" :emotion="selectedEmotion"
-          :emotion-options="emotionOptions" :emotion-intensity="emotionIntensity" :saved="saved"
-          @copy-color="copyToClipboard" @update:emotion="setEmotion" @update:emotion-intensity="setEmotionIntensity"
-          @save-palette="saveCurrentPalette" />
 
         <UiTrace v-if="lastRequestTrace && !isLoading">
           <p class="ui-trace__total">
@@ -73,6 +67,11 @@
             </li>
           </ul>
         </UiTrace>
+
+        <GeneratedPalette v-if="palette.length > 0" :palette="palette" :emotion="selectedEmotion"
+          :emotion-options="emotionOptions" :emotion-intensity="emotionIntensity" :saved="saved"
+          @copy-color="copyToClipboard" @update:emotion="setEmotion" @update:emotion-intensity="setEmotionIntensity"
+          @save-palette="saveCurrentPalette" />
 
         <SavedPalettesList v-if="savedPalettes.length > 0" :palettes="savedPalettes" @apply-palette="applySavedPalette"
           @remove-palette="removePalette" />
@@ -197,16 +196,16 @@ onMounted(() => {
     display: flex;
     flex-direction: column;
     align-items: stretch;
-    justify-content: center;
+    justify-content: flex-start;
     gap: $space-3;
   }
 
   &__brand {
-    align-self: center;
     position: relative;
     z-index: 1;
-    margin-bottom: $space-2;
+    margin: $space-4 0 0 $space-4;
     padding: 0;
+    width: fit-content;
   }
 
   &__card {

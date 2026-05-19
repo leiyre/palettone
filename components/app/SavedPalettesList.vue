@@ -6,15 +6,26 @@
     </h3>
     <ul class="saved-palettes-list__items">
       <li v-for="(item, idx) in palettes" :key="item.timestamp" class="saved-palettes-list__item">
-        <div class="saved-palettes-list__colors" :aria-label="`Saved palette ${idx + 1} colors`">
-          <button v-for="(color, colorIdx) in item.palette" :key="`${item.timestamp}-${color}-${colorIdx}`"
-            class="saved-palettes-list__color-box" type="button" :style="{ backgroundColor: color }"
-            :aria-label="`Apply saved palette ${idx + 1}, color ${color}`"
-            :aria-describedby="`saved-description-${idx}`" @click="emit('apply-palette', item.palette)" />
-        </div>
-        <span :id="`saved-description-${idx}`" class="saved-palettes-list__description">
-          {{ item.description }}
-        </span>
+        <button
+          class="saved-palettes-list__apply-btn"
+          type="button"
+          :aria-label="`Apply saved palette ${idx + 1}: ${item.description}`"
+          :aria-describedby="`saved-description-${idx}`"
+          @click="emit('apply-palette', item.palette)"
+        >
+          <div class="saved-palettes-list__colors" :aria-label="`Saved palette ${idx + 1} colors`">
+            <span
+              v-for="(color, colorIdx) in item.palette"
+              :key="`${item.timestamp}-${color}-${colorIdx}`"
+              class="saved-palettes-list__color-box"
+              :style="{ backgroundColor: color }"
+              aria-hidden="true"
+            />
+          </div>
+          <span :id="`saved-description-${idx}`" class="saved-palettes-list__description">
+            {{ item.description }}
+          </span>
+        </button>
         <button class="saved-palettes-list__delete-btn" type="button"
           :aria-label="`Delete saved palette ${idx + 1}: ${item.description}`" @click="emit('remove-palette', idx)">
           <Trash2 class="saved-palettes-list__delete-icon" aria-hidden="true" />
@@ -71,6 +82,27 @@ const emit = defineEmits<{
     box-shadow: $shadow-sm;
   }
 
+  &__apply-btn {
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+    gap: $space-3;
+    width: 100%;
+    text-align: left;
+    cursor: pointer;
+    border-radius: $radius-sm;
+    transition: background-color 0.2s ease, box-shadow 0.2s ease;
+
+    &:hover {
+      background-color: var(--color-surface-soft);
+    }
+
+    &:focus-visible {
+      outline: 2px solid var(--color-text);
+      outline-offset: 2px;
+    }
+  }
+
   &__colors {
     display: flex;
     flex-wrap: wrap;
@@ -86,7 +118,6 @@ const emit = defineEmits<{
     width: 28px;
     height: 28px;
     border-radius: $radius-sm;
-    cursor: pointer;
     border: 1px solid var(--color-border);
   }
 
@@ -120,6 +151,13 @@ const emit = defineEmits<{
       flex-direction: row;
       align-items: center;
       gap: 0;
+    }
+
+    &__apply-btn {
+      flex-direction: row;
+      align-items: center;
+      gap: 0;
+      flex-grow: 1;
     }
 
     &__colors {

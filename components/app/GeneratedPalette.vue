@@ -1,39 +1,41 @@
 <template>
   <section class="generated-palette" aria-labelledby="generated-palette-title">
     <h2 id="generated-palette-title" class="generated-palette__sr-only">Generated palette</h2>
-    <div class="generated-palette__controls">
-      <div class="generated-palette__control-group">
-        <label class="generated-palette__label" for="emotion-select">
-          <SmilePlus class="generated-palette__label-icon" aria-hidden="true" />
-          <span>Emotion</span>
-        </label>
-        <UiSelector id="emotion-select" class="generated-palette__select" :model-value="emotion"
-          :options="emotionOptions" @update:model-value="emit('update:emotion', $event)" />
-      </div>
-      <div class="generated-palette__control-group generated-palette__control-group--range">
-        <label class="generated-palette__label" for="intensity-range">
-          <Gauge class="generated-palette__label-icon" aria-hidden="true" />
-          <span>Intensity: {{ Math.round(emotionIntensity * 100) }}%</span>
-        </label>
-        <UiSlider id="intensity-range" class="generated-palette__range" :model-value="emotionIntensity"
-          :aria-valuetext="`${Math.round(emotionIntensity * 100)} percent`"
-          @update:model-value="emit('update:emotion-intensity', $event)" />
-      </div>
-    </div>
-
     <ul class="generated-palette__list" aria-label="Generated colors">
       <li v-for="(color, index) in palette" :key="`${color}-${index}`" class="generated-palette__item">
         <UiColor :color="color" @copy="emit('copy-color', $event)" />
       </li>
     </ul>
 
-    <div v-if="!saved" class="generated-palette__actions">
-      <UiButton variant="accent" @click="emit('save-palette')">
-        <template #icon>
-          <BookmarkPlus class="generated-palette__action-icon" aria-hidden="true" />
-        </template>
-        <span>Save palette</span>
-      </UiButton>
+    <div class="generated-palette__footer">
+      <div class="generated-palette__controls generated-palette__controls--after-list">
+        <div class="generated-palette__control-group">
+          <label class="generated-palette__label" for="emotion-select">
+            <SmilePlus class="generated-palette__label-icon" aria-hidden="true" />
+            <span>Emotion</span>
+          </label>
+          <UiSelector id="emotion-select" class="generated-palette__select" :model-value="emotion"
+            :options="emotionOptions" @update:model-value="emit('update:emotion', $event)" />
+        </div>
+        <div class="generated-palette__control-group generated-palette__control-group--range">
+          <label class="generated-palette__label" for="intensity-range">
+            <Gauge class="generated-palette__label-icon" aria-hidden="true" />
+            <span>Intensity: {{ Math.round(emotionIntensity * 100) }}%</span>
+          </label>
+          <UiSlider id="intensity-range" class="generated-palette__range" :model-value="emotionIntensity"
+            :aria-valuetext="`${Math.round(emotionIntensity * 100)} percent`"
+            @update:model-value="emit('update:emotion-intensity', $event)" />
+        </div>
+      </div>
+
+      <div v-if="!saved" class="generated-palette__actions">
+        <UiButton variant="accent" @click="emit('save-palette')">
+          <template #icon>
+            <BookmarkPlus class="generated-palette__action-icon" aria-hidden="true" />
+          </template>
+          <span>Save palette</span>
+        </UiButton>
+      </div>
     </div>
   </section>
 </template>
@@ -86,6 +88,10 @@ const emit = defineEmits<{
     grid-template-columns: 1fr;
     align-items: stretch;
     gap: $space-3;
+
+    &--after-list {
+      margin: 0 auto $space-4;
+    }
   }
 
   &__control-group {
@@ -130,8 +136,8 @@ const emit = defineEmits<{
     list-style: none;
     padding: 0;
     display: grid;
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-    gap: $space-3;
+    grid-template-columns: repeat(auto-fit, minmax(96px, 1fr));
+    gap: $space-2;
     margin: $space-8 0;
     justify-items: center;
   }
@@ -140,6 +146,13 @@ const emit = defineEmits<{
     margin: 0;
     width: 100%;
     max-width: 132px;
+  }
+
+  &__footer {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: $space-3;
+    align-items: end;
   }
 
   &__actions {
@@ -151,11 +164,20 @@ const emit = defineEmits<{
   }
 
   @include mq-up(lg) {
+    &__footer {
+      display: flex;
+      align-items: flex-end;
+      justify-content: center;
+      gap: $space-3;
+    }
+
     &__controls {
       display: flex;
       align-items: flex-end;
       gap: $space-3;
       flex-wrap: nowrap;
+      margin: 0;
+      flex: 1;
     }
 
     &__control-group {
@@ -182,6 +204,11 @@ const emit = defineEmits<{
     &__item {
       width: auto;
       max-width: none;
+    }
+
+    &__actions {
+      margin-top: 0;
+      flex: 0 0 auto;
     }
   }
 
